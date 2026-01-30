@@ -7,17 +7,44 @@ struct Enemy {
 };
 
 void addEnemy(Enemy enemies[], int &count) {
-    cout << "Adding Enemy" << endl;
+    if(count >= 5) {
+        cout << "Enemy is full";
+    }
+    else{
+        cout << "Adding Enemy" << endl;
 
-    cout << "Enter enemy ID: ";
-    cin >> enemies[count].id;
-
-    cout << "Enter Enemy Health: ";
-    cin >> enemies[count].health;
+        cout << "Enter enemy ID: ";
+        cin >> enemies[count].id;
+        enemies[count].health = 100;  
+        count++;
+    }
 }
 
-void damageEnemy(Enemy enemies[], int &count) {
+void damageEnemy(Enemy enemies[], int &count, int dmg) {
+    if(count == 0){
+        cout << "No enemies to damage" << endl;
+        return;
+    }
 
+    int keyenemy;
+    cout << "Enter the Enemy ID you want to damage: ";
+    cin >> keyenemy;
+
+    for(int i=0; i<count; i++){
+        if(keyenemy == enemies[i].id){
+            if(enemies[i].health - dmg <= 0){
+                cout << "Enemy Died";
+                for(int j=i; j<count-1; j++){
+                    enemies[j] = enemies[j+1];
+                }
+                count--;
+            }
+            else{
+                enemies[i].health -= dmg;
+            }
+            break;
+        }
+    }
 }
 
 void showEnemies(Enemy enemies[], int count) {
@@ -45,10 +72,12 @@ int main() {
         switch (choice) {
             case 1:
                 addEnemy(enemies, count);
-                count++;
                 break;
             case 2:
-                damageEnemy(enemies, count);
+                int dmg;
+                cout << "Enter damage value: ";
+                cin >> dmg;
+                damageEnemy(enemies, count, dmg);
                 break;
             case 3:
                 showEnemies(enemies, count);
